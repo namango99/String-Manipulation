@@ -1,0 +1,34 @@
+import java.io.BufferedOutputStream;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Scanner;
+
+class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		out=new PrintWriter (new BufferedOutputStream(System.out));
+		String qwerty="1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
+		String dvorak="123qjlmfp/[]456.orsuyb;=\\789aehtdck-0zx,inwvg'!@#QJLMFP?{}$%^>ORSUYB:+|&*(AEHTDCK_)ZX<INWVG\"";
+		HashMap<Character,Character> dictionary=new HashMap<>();
+		int n=qwerty.length();
+		for(int i=0;i<n;i++){
+			dictionary.put(qwerty.charAt(i), dvorak.charAt(i));
+		}
+		dictionary.put('`', '`');
+		dictionary.put(' ', ' ');
+		dictionary.put('~', '~');
+		Scanner s=new Scanner(System.in);
+		while(s.hasNext()) {
+			String str=s.nextLine();
+			for(int i=0;i<str.length();i++) {
+				out.print(dictionary.get(str.charAt(i)));
+			}
+			out.println();
+		}
+		out.close();
+	}
+	
+	public static PrintWriter out;
+
+}
