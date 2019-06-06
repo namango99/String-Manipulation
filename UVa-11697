@@ -1,0 +1,143 @@
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		out=new PrintWriter (new BufferedOutputStream(System.out));
+		FastReader s=new FastReader();
+		int t=s.nextInt();
+		while(t-->0) {
+			String key=s.nextLine();
+			key=key.replaceAll("[^a-z]", "");
+			boolean[] arr=new boolean[26];
+			int[][] grid=new int[5][5];
+			arr[16]=true;
+			int row=0,col=0;
+			for(int i=0;i<key.length();i++,row=col/5!=0?row+1:row,col%=5) {
+				int current=key.charAt(i)-'a';
+				if(!arr[current]) {
+					grid[row][col]=current+'a';
+					arr[current]=true;
+					col++;
+				}
+			}
+			for(int i=0;i<26;i++,row=col/5!=0?row+1:row,col%=5) {
+				if(!arr[i]) {
+					grid[row][col]=i+'a';
+					arr[i]=true;
+					col++;
+				}
+			}
+			HashMap<Integer,Integer> rows=new HashMap<Integer,Integer>();
+			HashMap<Integer,Integer> cols=new HashMap<Integer,Integer>();
+			for(int i=0;i<5;i++) {
+				for(int j=0;j<5;j++) {
+					rows.put(grid[i][j], i);
+					cols.put(grid[i][j], j);
+				}
+			}
+			String plain=s.nextLine();
+			plain=plain.replaceAll("[^a-z]", "");
+			StringBuilder newplain=new StringBuilder();
+			for(int i=0;i<plain.length()-1;i+=2) {
+				if(plain.charAt(i+1)==plain.charAt(i)) {
+					newplain.append(plain.charAt(i));
+					newplain.append('x');
+					i--;
+				}else {
+					newplain.append(plain.charAt(i));
+					newplain.append(plain.charAt(i+1));
+				}
+			}
+			if(newplain.length()==0 || newplain.charAt(newplain.length()-1)!=plain.charAt(plain.length()-1)) {
+				newplain.append(plain.charAt(plain.length()-1));
+			}
+			if(newplain.length()%2==0) {
+			}else {		newplain.append('x');	}
+			StringBuilder ans=new StringBuilder();
+			for(int i=0;i<newplain.length();i+=2) {
+				int row1=rows.get((int)newplain.charAt(i));
+				int col1=cols.get((int)newplain.charAt(i));
+				int row2=rows.get((int)newplain.charAt(i+1));
+				int col2=cols.get((int)newplain.charAt(i+1));
+				if(col1==col2) {
+					row1++;
+					row2++;
+					row1%=5;
+					row2%=5;
+					ans.append((char)grid[row1][col1]);
+					ans.append((char)grid[row2][col2]);
+				}else if(row1==row2) {
+					col1++;
+					col2++;
+					col1%=5;
+					col2%=5;
+					ans.append((char)grid[row1][col1]);
+					ans.append((char)grid[row2][col2]);
+				}else {
+					ans.append((char)grid[row1][col2]);
+					ans.append((char)grid[row2][col1]);
+				}
+			}
+			String finalans=ans.toString();
+			finalans=finalans.toUpperCase();
+			out.println(finalans);
+		}
+		out.close();
+	}
+
+	public static PrintWriter out;
+	
+	public static class FastReader {
+		BufferedReader br;
+		StringTokenizer st;
+		//it reads the data about the specified point and divide the data about it ,it is quite fast
+		//than using direct 
+
+		public FastReader() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+			//InputStream reads the data and decodes in character stream
+			//It acts as bridge between byte stream and character stream
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreTokens()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());//converts string to integer
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+	}
+	
+}
