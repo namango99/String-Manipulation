@@ -1,0 +1,36 @@
+import java.io.BufferedOutputStream;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Scanner;
+
+class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		out=new PrintWriter (new BufferedOutputStream(System.out));
+		Scanner s=new Scanner(System.in);
+		while(s.hasNext()) {
+			int n=s.nextInt();
+			String str=s.next();
+			HashMap<String,Integer> helper=new HashMap<>();
+			for(int i=0;i<str.length()-n+1;i++) {
+				String substring=str.substring(i,i+n);
+				helper.put(substring,helper.containsKey(substring)?helper.get(substring)+1:1);
+			}
+			int max=0;
+			String password="";
+			for(String x:helper.keySet()) {
+				int value=helper.get(x);
+				if(max<value) {
+					max=value;
+					password=x;
+				}
+			}
+			System.out.println(password);
+		}
+		out.close();
+	}
+
+	public static PrintWriter out;
+	
+}
