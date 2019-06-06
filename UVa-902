@@ -26,7 +26,7 @@ class Main {
 					password=x;
 				}
 			}
-			System.out.println(password);
+			out.println(password);
 		}
 		out.close();
 	}
