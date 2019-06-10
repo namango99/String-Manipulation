@@ -1,0 +1,138 @@
+//Caesar Cipher...nice problem of KMP
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
+class Main{
+	public static void KMP_Process(String Pattern, int[] Reset_Table) {
+		int i=0,j=-1;Reset_Table[0]=-1;
+		while(i<Pattern.length()) {
+			while(j>=0 && Pattern.charAt(i)!=Pattern.charAt(j)) {
+				j=Reset_Table[j];
+			}
+			i++; j++;
+			Reset_Table[i]=j;
+		}
+	}
+	
+	public static boolean KMP_Searching(String Pattern , String string ) {
+		int n=string.length(),m=Pattern.length();
+		int[] reset_table=new int[m+1];
+		ArrayList<Integer> ans=new ArrayList<Integer>();
+		KMP_Process(Pattern,reset_table);
+		int i=0,j=0;
+		while(i<n) {
+			while(j>=0 && Pattern.charAt(j)!=string.charAt(i)) {
+				j=reset_table[j];
+			}
+			i++; j++;
+			if(j==m) {
+				ans.add(i-j);
+				if(ans.size()>1) {
+					return false;
+				}
+				j=reset_table[j];
+			}
+		}
+		if(ans.size()==1)return true;
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		out=new PrintWriter (new BufferedOutputStream(System.out));
+		FastReader s=new FastReader();
+		int t=s.nextInt();
+		while(t-->0) {
+			String alphabet=s.next();
+			String word=s.next();
+			String string=s.next();
+			ArrayList<Integer> ans=new ArrayList<Integer>();
+			for(int i=0;i<alphabet.length();i++) {
+				HashMap<Character , Character > secondhelper=new HashMap<Character,Character>();
+				for(int j=0;j<alphabet.length();j++) {
+					secondhelper.put(alphabet.charAt(j), alphabet.charAt((i+j)%alphabet.length()));
+				}
+				StringBuilder helper=new StringBuilder();
+				for(int j=0;j<word.length();j++) {
+					helper.append(secondhelper.get(word.charAt(j)));
+				}
+//				String helper2=helper.toString();
+//				int value=string.indexOf(helper2);
+//				int secondvalue=string.indexOf(helper2,value+1);
+//				if(value!=-1 && secondvalue==-1) {
+//					ans.add(i);
+//				}
+				if(KMP_Searching(helper.toString(),string)) {
+					ans.add(i);
+				}
+			}
+			if(ans.size()==0) {
+				out.println("no solution");
+			}else if(ans.size()==1) {
+				out.println("unique: "+ans.get(0));
+			}else {
+				out.print("ambiguous:");
+				for(Integer x:ans) {
+					out.print(" "+x);
+				}
+				out.println();
+			}
+		}
+		out.close();
+	}
+
+	public static PrintWriter out;
+	
+	public static class FastReader {
+		BufferedReader br;
+		StringTokenizer st;
+		//it reads the data about the specified point and divide the data about it ,it is quite fast
+		//than using direct 
+
+		public FastReader() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+			//InputStream reads the data and decodes in character stream
+			//It acts as bridge between byte stream and character stream
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreTokens()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());//converts string to integer
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+	}
+	
+}
