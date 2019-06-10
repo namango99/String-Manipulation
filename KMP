@@ -1,0 +1,51 @@
+import java.util.ArrayList;
+
+public class KMPSearchingALGO {
+
+	public static void KMPProcess(String Pattern,int[] Reset_table) { // Used to create reset table for the Kmp searching 
+		int m=Pattern.length();
+		//int[] Reset_table=new int[m+1];//not needed to declare here
+		//always one length greater than pattern itself
+		int i=0,j=-1;  // i to traverse through whole string while j for the initial regions and is reset regularly
+		Reset_table[0]=-1; //First position is set of -1 
+		while(i<m) { //used for traversing whole array
+			while(j>=0 && Pattern.charAt(i)!=Pattern.charAt(j)) {
+				j=Reset_table[j];//if current position is not equal to the earlier position than the 
+				// value of j is reset according to the reset table
+			}
+			i++; j++; //if current both values are same or j=-1 than i++ and j++ occur
+			Reset_table[i]=j; //now the reset_table of the next position will contain 
+		}
+	}
+	
+	public static void KMP_Searching(String Pattern,String string,ArrayList<Integer> ans) {
+		int n=string.length(),m=Pattern.length();
+		int[] reset_table=new int[m+1];
+		KMPProcess(Pattern,reset_table);
+		int i=0,j=0;//i for the string and j for the pattern
+		while(i<n) {
+			while(j>=0 && Pattern.charAt(j)!=string.charAt(i)) {
+				j=reset_table[j];
+			}
+			i++; j++;
+			if(j==m) {
+				ans.add(i-j);//starting index is added to the ans
+				j=reset_table[j];//for comparing again
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String string = "aaaaaaaaaaab";
+		String pattern = "aaab";
+		ArrayList<Integer> ans=new ArrayList<Integer>();
+		KMP_Searching(pattern, string , ans);
+		for(Integer x:ans) {
+			System.out.println(x);
+		}
+	}
+
+}
+//Time Complexity :  O(m+n)
+//Quite Fast Than naive string searching algo
