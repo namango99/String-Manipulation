@@ -1,0 +1,89 @@
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
+class Main{
+	public static void KMP_Process(String Pattern,int[] reset_table) {
+		int i=0,j=-1;
+		reset_table[0]=-1;
+		while(i<Pattern.length()) {
+			while(j>=0 && Pattern.charAt(i)!=Pattern.charAt(j)) {
+				j=reset_table[j];
+			}
+			i++; j++;
+			reset_table[i]=j;
+		}
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		out=new PrintWriter (new BufferedOutputStream(System.out));
+		FastReader s=new FastReader();
+		String str=s.next();
+		while(!str.equals(".")) {
+			int[] arr=new int[str.length()+1];
+			KMP_Process(str,arr);//Kmp used to create an lps array...
+			int n=arr.length-1;
+			int value=arr[arr.length-1];
+			int temp=n-value;
+			if(n%temp==0) {
+				out.println(n/temp);
+			}else {
+				out.println(1);
+			}
+			str=s.next();
+		}
+		out.close();
+	}
+
+	public static PrintWriter out;
+	
+	public static class FastReader {
+		BufferedReader br;
+		StringTokenizer st;
+		//it reads the data about the specified point and divide the data about it ,it is quite fast
+		//than using direct 
+
+		public FastReader() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+			//InputStream reads the data and decodes in character stream
+			//It acts as bridge between byte stream and character stream
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreTokens()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());//converts string to integer
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+	} 
+	
+}
