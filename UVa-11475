@@ -1,0 +1,67 @@
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Main {
+	public static void KMP_Process(String Pattern,int[] lps) {
+		int i=0,j=-1;
+		lps[i]=j;
+		while(i<Pattern.length()) {
+			while(j>=0 && Pattern.charAt(i)!=Pattern.charAt(j)) {
+				j=lps[j];
+			}
+			i++; j++;
+			lps[i]=j;
+		}
+	}
+	
+	public static int KMP_Searching(String string,String Pattern,ArrayList<Integer> matches) {
+		int i=0,j=0;
+		int[] lps=new int[Pattern.length()+1];
+		KMP_Process(Pattern,lps);
+		while(i<string.length()) {
+			while(j>=0 && string.charAt(i)!=Pattern.charAt(j)) {
+				j=lps[j];
+			}
+			i++; j++;
+			if(j==Pattern.length()) {
+				matches.add(i-j);
+				j=lps[j];
+			}
+		}
+		return j;
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner s=new Scanner(System.in);
+		while(s.hasNext()) {
+			String str=s.next();
+			ArrayList<Integer> matches=new ArrayList<Integer>();
+			String reverse=Reverse(str);
+			int value=KMP_Searching(str,reverse,matches);
+			StringBuilder ans=new StringBuilder();
+			ans.append(str);
+			if(matches.size()==0) {
+				for(int i=value;i<reverse.length();i++) {
+					ans.append(reverse.charAt(i));
+				}
+			}
+			System.out.println(ans);
+			
+		}
+	}
+
+	public static String Reverse(String str) {
+		StringBuilder ans=new StringBuilder();
+		for(int i=str.length()-1;i>=0;i--) {
+			ans.append(str.charAt(i));
+		}
+		return ans.toString();
+	}
+	
+	public static PrintWriter out;
+	
+}
+
+//Good Question Based On KMP_Searching Algo ... Need understanding of LPS table properly as well.. ;)
